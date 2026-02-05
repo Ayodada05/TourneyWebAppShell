@@ -1,6 +1,8 @@
 "use server";
 
+import { redirect } from "next/navigation";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { isAdmin } from "@/lib/admin";
 
 export type AuthActionState = {
   ok: boolean;
@@ -23,19 +25,27 @@ export async function signUpAction(
     return missingFields;
   }
 
+  let userId: string | null = null;
+
   try {
     const supabase = await createSupabaseServerClient();
-    const { error } = await supabase.auth.signUp({ email, password });
+    const { data, error } = await supabase.auth.signUp({ email, password });
 
     if (error) {
       return { ok: false, message: error.message };
     }
 
-    return { ok: true, message: "Sign up successful. Check your email if confirmation is required." };
+    userId = data.user?.id ?? null;
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown error";
     return { ok: false, message };
   }
+
+  if (userId) {
+    redirect(isAdmin(userId) ? "/admin" : "/dashboard");
+  }
+
+  return { ok: true, message: "Sign up successful. Check your email if confirmation is required." };
 }
 
 export async function signInAction(
@@ -49,19 +59,27 @@ export async function signInAction(
     return missingFields;
   }
 
+  let userId: string | null = null;
+
   try {
     const supabase = await createSupabaseServerClient();
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
     if (error) {
       return { ok: false, message: error.message };
     }
 
-    return { ok: true, message: "Signed in." };
+    userId = data.user?.id ?? null;
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown error";
     return { ok: false, message };
   }
+
+  if (userId) {
+    redirect(isAdmin(userId) ? "/admin" : "/dashboard");
+  }
+
+  return { ok: true, message: "Signed in." };
 }
 
 export async function signOutAction(): Promise<void> {

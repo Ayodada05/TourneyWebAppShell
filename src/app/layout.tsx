@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Header from "@/components/Header";
+import SiteHeader from "@/components/SiteHeader";
+import SiteFooter from "@/components/SiteFooter";
 
 export const metadata: Metadata = {
   title: "Tournament Website",
@@ -14,9 +15,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="min-h-screen bg-slate-50 text-slate-900">
-        <Header />
-        <main className="mx-auto max-w-5xl px-6 py-8">{children}</main>
+      <body className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50 text-slate-900 antialiased">
+        <SiteHeader />
+        <main className="px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-6xl py-10 sm:py-12">{children}</div>
+        </main>
+        <SiteFooter />
       </body>
     </html>
   );
