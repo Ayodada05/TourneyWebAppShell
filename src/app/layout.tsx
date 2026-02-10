@@ -15,11 +15,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50 text-slate-900 antialiased">
+      <body className="flex min-h-screen flex-col">
         <SiteHeader />
-        <main className="px-4 sm:px-6 lg:px-8">
-          <div className="mx-auto max-w-6xl py-10 sm:py-12">{children}</div>
-        </main>
+        <main className="flex-1">{children}</main>
         <SiteFooter />
       </body>
     </html>

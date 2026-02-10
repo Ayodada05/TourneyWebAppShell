@@ -31,8 +31,8 @@ export default async function TournamentDetailPage({ params }: PageProps) {
 
   if (!tournament) {
     return (
-      <section className="space-y-4">
-        <h1 className="text-2xl font-semibold">Tournament not found</h1>
+      <section className="mx-auto max-w-6xl space-y-4 px-4 py-10 sm:px-6 sm:py-12 lg:px-8">
+        <h1 className="text-2xl font-semibold text-slate-900">Tournament not found</h1>
         <Link href="/tournaments" className="text-sm text-blue-600 hover:text-blue-700">
           Back to tournaments
         </Link>
@@ -78,7 +78,7 @@ export default async function TournamentDetailPage({ params }: PageProps) {
   }
 
   return (
-    <section className="space-y-8">
+    <section className="mx-auto max-w-6xl space-y-8 px-4 py-10 sm:px-6 sm:py-12 lg:px-8">
       <Card className="space-y-3">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">
@@ -128,6 +128,7 @@ export default async function TournamentDetailPage({ params }: PageProps) {
         <div className="lg:col-span-5">
           <RegisterCard
             tournamentId={tournament.id}
+            tournamentStatus={tournament.status}
             loggedIn={!!user}
             team={team}
             registration={registration}

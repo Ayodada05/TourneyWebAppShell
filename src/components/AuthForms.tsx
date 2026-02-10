@@ -2,8 +2,6 @@
 
 import { useActionState } from "react";
 import { signInAction, signUpAction } from "@/app/actions/auth";
-import Input from "@/components/ui/Input";
-import Button from "@/components/ui/Button";
 
 const initialState = { ok: false, message: "" };
 
@@ -28,24 +26,39 @@ export default function AuthForms({ variant = "stacked" }: AuthFormsProps) {
           <label className="text-sm font-medium text-slate-700" htmlFor="signin-email">
             Email
           </label>
-          <Input id="signin-email" name="email" type="email" required />
+          <input
+            id="signin-email"
+            name="email"
+            type="email"
+            required
+            className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          />
         </div>
         <div className="space-y-2">
           <label className="text-sm font-medium text-slate-700" htmlFor="signin-password">
             Password
           </label>
-          <Input id="signin-password" name="password" type="password" required />
+          <input
+            id="signin-password"
+            name="password"
+            type="password"
+            required
+            className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          />
         </div>
-        <Button type="submit" className="w-full bg-slate-900 text-white hover:bg-slate-800">
+        <button
+          type="submit"
+          className="w-full rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-medium text-white hover:bg-slate-800"
+        >
           Sign in
-        </Button>
+        </button>
         {signInState.message && (
           <div
-            className={`rounded-xl border p-3 text-sm ${
+            className={
               signInState.ok
-                ? "border-emerald-200 bg-emerald-50 text-emerald-800"
-                : "border-red-200 bg-red-50 text-red-800"
-            }`}
+                ? "rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-sm text-emerald-800"
+                : "rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-800"
+            }
           >
             {signInState.message}
           </div>
@@ -63,24 +76,39 @@ export default function AuthForms({ variant = "stacked" }: AuthFormsProps) {
           <label className="text-sm font-medium text-slate-700" htmlFor="signup-email">
             Email
           </label>
-          <Input id="signup-email" name="email" type="email" required />
+          <input
+            id="signup-email"
+            name="email"
+            type="email"
+            required
+            className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          />
         </div>
         <div className="space-y-2">
           <label className="text-sm font-medium text-slate-700" htmlFor="signup-password">
             Password
           </label>
-          <Input id="signup-password" name="password" type="password" required />
+          <input
+            id="signup-password"
+            name="password"
+            type="password"
+            required
+            className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          />
         </div>
-        <Button type="submit" variant="secondary" className="w-full">
+        <button
+          type="submit"
+          className="w-full rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-medium text-white hover:bg-slate-800"
+        >
           Sign up
-        </Button>
+        </button>
         {signUpState.message && (
           <div
-            className={`rounded-xl border p-3 text-sm ${
+            className={
               signUpState.ok
-                ? "border-emerald-200 bg-emerald-50 text-emerald-800"
-                : "border-red-200 bg-red-50 text-red-800"
-            }`}
+                ? "rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-sm text-emerald-800"
+                : "rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-800"
+            }
           >
             {signUpState.message}
           </div>

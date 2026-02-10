@@ -43,10 +43,16 @@ export default async function ManageTournamentsPage() {
 
   if (staffError) {
     return (
-      <section className="space-y-4">
-        <h1 className="text-2xl font-semibold">My Tournaments</h1>
-        <p className="text-sm text-rose-600">{staffError.message}</p>
-      </section>
+      <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
+        <section className="space-y-4">
+          <div className="space-y-2">
+            <p className="text-sm text-slate-500">Manage</p>
+            <h1 className="text-3xl font-bold tracking-tight text-slate-900">My tournaments</h1>
+            <p className="text-slate-600">Tournaments you can manage.</p>
+          </div>
+          <p className="text-sm text-rose-600">{staffError.message}</p>
+        </section>
+      </div>
     );
   }
 
@@ -67,57 +73,73 @@ export default async function ManageTournamentsPage() {
   const { data: tournaments, error } = await query;
 
   return (
-    <section className="space-y-8">
-      <div className="space-y-2">
-        <p className="text-xs font-medium text-slate-500">Manage</p>
-        <h1 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
-          My tournaments
-        </h1>
-        <p className="text-slate-600">Tournaments you can manage.</p>
-      </div>
+    <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
+      <section className="space-y-8">
+        <div className="space-y-2">
+          <p className="text-sm text-slate-500">Manage</p>
+          <h1 className="text-3xl font-bold tracking-tight text-slate-900">My tournaments</h1>
+          <p className="text-slate-600">Tournaments you can manage.</p>
+        </div>
 
-      {error ? (
-        <p className="text-sm text-rose-600">Unable to load tournaments.</p>
-      ) : tournaments && tournaments.length > 0 ? (
-        <Card className="space-y-4">
-          {tournaments.map((tournament: TournamentRow) => (
-            <div
-              key={tournament.id}
-              className="flex flex-col gap-4 border-b border-slate-100 pb-4 last:border-none last:pb-0 md:flex-row md:items-center md:justify-between"
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="text-sm text-slate-500">Showing your tournaments</div>
+          <div className="flex flex-wrap items-center gap-3">
+            <Link
+              href="/tournaments"
+              className="inline-flex items-center justify-center rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-900 hover:bg-slate-50"
             >
-              <div className="space-y-2">
-                <div className="flex items-center gap-2">
+              Browse tournaments
+            </Link>
+          </div>
+        </div>
+
+        {error ? (
+          <p className="text-sm text-rose-600">Unable to load tournaments.</p>
+        ) : tournaments && tournaments.length > 0 ? (
+          <Card className="space-y-2 p-6">
+            {tournaments.map((tournament: TournamentRow) => (
+              <div
+                key={tournament.id}
+                className="flex flex-col gap-4 border-b border-slate-100 py-3 last:border-none md:flex-row md:items-center md:justify-between"
+              >
+                <div className="space-y-2">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <Link
+                      href={`/tournaments/${tournament.id}`}
+                      className="text-base font-semibold text-slate-900 hover:text-indigo-700"
+                    >
+                      {tournament.name}
+                    </Link>
+                    <Badge variant={tournament.status as "draft" | "open" | "ongoing" | "completed"}>
+                      {tournament.status}
+                    </Badge>
+                  </div>
+                  <div className="text-xs text-slate-500">
+                    Starts {formatDate(tournament.start_date)}
+                    {tournament.end_date ? ` · Ends ${formatDate(tournament.end_date)}` : ""}
+                  </div>
+                </div>
+                <div className="flex flex-wrap items-center gap-3">
                   <Link
-                    href={`/tournaments/${tournament.id}`}
-                    className="text-base font-semibold text-slate-900 hover:text-blue-600"
+                    href={`/tournaments/${tournament.id}/manage`}
+                    className="inline-flex items-center justify-center rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-900 hover:bg-slate-50"
                   >
-                    {tournament.name}
+                    Manage
                   </Link>
-                  <Badge variant={tournament.status as "draft" | "open" | "ongoing" | "completed"}>
-                    {tournament.status}
-                  </Badge>
+                  <StatusToggle tournamentId={tournament.id} currentStatus={tournament.status} />
                 </div>
-                <div className="text-xs text-slate-500">
-                  Starts {formatDate(tournament.start_date)}
-                  {tournament.end_date ? ` · Ends ${formatDate(tournament.end_date)}` : ""}
-                </div>
-                <Link
-                  href={`/tournaments/${tournament.id}/manage`}
-                  className="text-xs font-semibold text-blue-600 hover:text-blue-700"
-                >
-                  Manage tournament
-                </Link>
               </div>
-              <StatusToggle tournamentId={tournament.id} currentStatus={tournament.status} />
-            </div>
-          ))}
-        </Card>
-      ) : (
-        <EmptyState
-          title="No tournaments to manage yet"
-          description="Create a tournament or ask a staff member to add you."
-        />
-      )}
-    </section>
+            ))}
+          </Card>
+        ) : (
+          <Card className="p-6">
+            <EmptyState
+              title="No tournaments to manage yet"
+              description="Create a tournament or ask a staff member to add you."
+            />
+          </Card>
+        )}
+      </section>
+    </div>
   );
 }

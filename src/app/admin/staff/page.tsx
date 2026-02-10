@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
-import { isAdmin } from "@/lib/admin";
+import { isAdmin } from "@/lib/auth/admin";
 import Card from "@/components/ui/Card";
 
 export default async function AdminStaffPage() {

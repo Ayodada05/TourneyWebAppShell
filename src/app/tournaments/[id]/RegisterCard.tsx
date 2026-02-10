@@ -2,28 +2,47 @@
 
 import Link from "next/link";
 import { useActionState } from "react";
-import { registerMyTeamAction, type RegisterResult } from "@/app/actions/tournaments";
+import { useFormStatus } from "react-dom";
+import {
+  registerForTournamentAction,
+  type RegistrationActionResult
+} from "@/app/actions/registrations";
 import Card from "@/components/ui/Card";
 import Button from "@/components/ui/Button";
 import Badge from "@/components/ui/Badge";
 import Alert from "@/components/ui/Alert";
 
-const initialState: RegisterResult = { ok: false, message: "" };
+const initialState: RegistrationActionResult = { ok: false, message: "" };
 
 type RegisterCardProps = {
   tournamentId: string;
+  tournamentStatus: string;
   loggedIn: boolean;
   team: { id: string; name: string } | null;
   registration: { id: string; status: string } | null;
 };
 
+function SubmitButton({ disabled }: { disabled: boolean }) {
+  const { pending } = useFormStatus();
+  return (
+    <Button type="submit" disabled={pending || disabled}>
+      Register team
+    </Button>
+  );
+}
+
 export default function RegisterCard({
   tournamentId,
+  tournamentStatus,
   loggedIn,
   team,
   registration
 }: RegisterCardProps) {
-  const [state, formAction] = useActionState(registerMyTeamAction, initialState);
+  const [state, formAction] = useActionState(
+    async (_prevState: RegistrationActionResult, _formData: FormData) =>
+      registerForTournamentAction(tournamentId),
+    initialState
+  );
 
   if (!loggedIn) {
     return (
@@ -41,7 +60,7 @@ export default function RegisterCard({
     return (
       <Card className="space-y-3">
         <h3 className="text-lg font-semibold">Registration</h3>
-        <Alert variant="info">Create a team to register.</Alert>
+        <Alert variant="info">Create a team to register</Alert>
         <Link
           href="/teams/new"
           className="text-sm font-semibold text-blue-600 hover:text-blue-700"
@@ -67,6 +86,15 @@ export default function RegisterCard({
     );
   }
 
+  if (tournamentStatus !== "open") {
+    return (
+      <Card className="space-y-3">
+        <h3 className="text-lg font-semibold">Registration</h3>
+        <Alert variant="info">Registrations are closed for this tournament.</Alert>
+      </Card>
+    );
+  }
+
   return (
     <Card className="space-y-4">
       <div>
@@ -78,8 +106,7 @@ export default function RegisterCard({
         <div className="text-xs text-slate-500">Team id: {team.id}</div>
       </div>
       <form action={formAction} className="space-y-3">
-        <input type="hidden" name="tournamentId" value={tournamentId} />
-        <Button type="submit">Register team</Button>
+        <SubmitButton disabled={state.ok} />
         {state.message && (
           <Alert variant={state.ok ? "success" : "error"}>{state.message}</Alert>
         )}
